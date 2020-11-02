@@ -16,3 +16,10 @@ Tenga en cuenta que las acciones del menú no tienen un orden en particular.
 
 import csv
 
+def imprimir_menu():
+    print("\n-GESTOR DE VACACIONES-")
+    print("1 - Cargar Datos de Legajo")
+    print("2 - Calcular Vacaciones Disponibles")
+    print("3 - Salir")
+
+imprimir_menu()
