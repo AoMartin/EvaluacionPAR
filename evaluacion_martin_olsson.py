@@ -27,6 +27,9 @@ def imprimir_menu():
 #guarda los nombres de los archivos generados por el usuario
 archivos_generados = []
 
+'''
+FUNCIONES PARA EL PUNTO B
+'''
 
 #OPCION 1 - Cargar Datos de Legajo
 def cargar_datos():
@@ -51,6 +54,7 @@ def cargar_datos():
             cargador_archivo = csv.writer(archivo)
             cargador_archivo.writerow(campos)
             cargador_archivo.writerows(empleados_ingresados)
+            print(f'-El archivo {nombre_archivo} fue guardado con exito.-')
     except IOError:
         print("Hubo un problema con el archivo")
 
@@ -102,4 +106,36 @@ def ingresar_nombre_archivo(archivos_generados):
             
     return nombre_archivo, opcion
 
-cargar_datos()
+
+'''
+FUNCIONES PARA EL PUNTO C:
+
+c - Dado el número de legajo de un empleado calcular e informar en pantalla los días que le quedan disponibles 
+de vacaciones junto con el resto de sus datos. Por ejemplo "Legajo 1 : Laura Estebanez, le restan 11 días de vacaciones" 
+
+Tenga en cuenta que las acciones del menú no tienen un orden en particular.
+'''
+
+#OPCION 2 - Calcular Vacaciones Disponibles
+def calcular_vacaciones():
+    #ingresar num legajo: se usa la funcion de validar enteros
+    numero_legajo = validar_entrada_enteros("Número de legajo")
+
+    #elegir archivo a usar
+    if len(archivos_generados) == 0:
+        print("No hay datos de empleados cargados, por favor primero ingrese los datos al sistema.")
+        return
+
+    print("Elija el archivo de datos que desea utilizar: ")
+    for contador in range(len(archivos_generados)):
+        print(f"{contador} - {archivos_generados[contador]}")
+
+    ingreso_valido = False
+    while not ingreso_valido:
+        archivo_elegido = int(input("Ingrese el numero del archivo a utilizar: "))
+        if archivo_elegido > len(archivos_generados) or  archivo_elegido < 0:
+            print("-Ingrese un numero valido de los de la lista-")
+        else:
+            ingreso_valido=True
+    
+    #mostar vacaciones
