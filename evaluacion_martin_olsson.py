@@ -139,3 +139,30 @@ def calcular_vacaciones():
             ingreso_valido=True
     
     #mostar vacaciones
+    try:
+        with open(archivos_generados[archivo_elegido]) as file_empleados:
+            with open("dias.csv") as file_dias:
+
+                csv_empleados = csv.reader(file_empleados)
+                csv_dias = csv.reader(file_dias)
+
+                # Saltea los encabezados
+                next(csv_empleados)
+                next(csv_dias)
+
+                vacaciones_usadas = 0
+                
+                empleado = next(csv_empleados,None)
+                dia = next(csv_dias, None)
+
+                while empleado:
+                    if(int(empleado[0])==numero_legajo):
+                        while dia:
+                            if int(dia[0])==numero_legajo:
+                                vacaciones_usadas+=1
+                            dia = next(csv_dias, None)
+                        vacaciones_restantes = int(empleado[3]) - vacaciones_usadas
+                        print(f'Legajo {numero_legajo} : {empleado[2]}{empleado[1]}, le restan {vacaciones_restantes} días de vacaciones')
+                    empleado = next(csv_empleados,None)
+    except IOError:
+        print("Error en al abrir el archivo")
