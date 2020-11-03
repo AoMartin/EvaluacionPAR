@@ -63,14 +63,13 @@ def ingresar_datos_entrada(campos, campos_a_validar_enteros):
     while continuar == "si" or continuar == "" or continuar == "\n":
         empleado = []
 
-        for campo in campos:
+        for contador in range(len(campos)):
             #Si el indice del campo esta en la lista de los que hay que validar que sean enteros
-            print(campo)
-            if campos_a_validar_enteros.__contains__(int(campo.index)):
+            if campos_a_validar_enteros.__contains__(contador):
                 #llama a la funcion especial para ingresar y validar numeros enteros
-                empleado.append( validar_entrada_enteros(campo) )
+                empleado.append( validar_entrada_enteros(campos[contador]) )
             else:    
-                empleado.append(input(f"Ingresar {campo} del empleado: "))
+                empleado.append(input(f"Ingresar {campos[contador]} del empleado: "))
 
         datos_entrada.append(empleado)
         continuar = input("Continuar agregando datos? (escriba 'si' o pulse enter para continuar)")
