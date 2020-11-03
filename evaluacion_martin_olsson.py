@@ -23,23 +23,39 @@ def imprimir_menu():
     print("2 - Calcular Vacaciones Disponibles")
     print("3 - Salir")
 
+
 #guarda los nombres de los archivos generados por el usuario
 archivos_generados = []
 
 
+#OPCION 1 - Cargar Datos de Legajo
 def cargar_datos():
     campos = ['Legajo', 'Apellido', 'Nombre', 'Total Vacaciones']
-    lista_empleados = []
+    empleados_ingresados = []
 
     #ingresar datos: envia los campos a ingresar, y los indices de cuales deben ser numeros enteros
-    lista_empleados = ingresar_datos_entrada(campos, [0,3])
+    empleados_ingresados = ingresar_datos_entrada(campos, [0,3])
 
-    #ingresar nombre archivo: se le pasa la lista de archivos generados
-    ingresar_nombre_archivo(archivos_generados)
+    #ingresar nombre archivo: se le pasa la lista de archivos generados, devuelve el nombre y si quiere modificar/sobreescirbir
+    nombre_archivo, modo_archivo = ingresar_nombre_archivo(archivos_generados)
+    archivos_generados.append(nombre_archivo)
 
     #guardar
+    if modo_archivo=='modificar':
+        modo_archivo='a'
+    else:    
+        modo_archivo='w'
+
+    try:
+        with open(nombre_archivo, modo_archivo, newline="") as archivo:
+            cargador_archivo = csv.writer(archivo)
+            cargador_archivo.writerow(campos)
+            cargador_archivo.writerows(empleados_ingresados)
+    except IOError:
+        print("Hubo un problema con el archivo")
 
 
+#funcion usada para que el usuario ingrese los datos de los empleados
 def ingresar_datos_entrada(campos, campos_a_validar_enteros):
     continuar = "si"
     datos_entrada = []
@@ -49,7 +65,8 @@ def ingresar_datos_entrada(campos, campos_a_validar_enteros):
 
         for campo in campos:
             #Si el indice del campo esta en la lista de los que hay que validar que sean enteros
-            if campos_a_validar_enteros.__contains__(campo.index):
+            print(campo)
+            if campos_a_validar_enteros.__contains__(int(campo.index)):
                 #llama a la funcion especial para ingresar y validar numeros enteros
                 empleado.append( validar_entrada_enteros(campo) )
             else:    
@@ -60,14 +77,30 @@ def ingresar_datos_entrada(campos, campos_a_validar_enteros):
     return datos_entrada
 
 
+#funcion usada para validar los campos que deben ser numeros enteros
 def validar_entrada_enteros(campo):
     valor_correcto = False
     while not valor_correcto:
         try:
             valor_ingresado = int(input(f"Ingresar {campo} del empleado: "))
+            valor_correcto = True
         except:
             print("-Por favor ingrese un número entero-")
-        valor_correcto = True
+        
     return valor_ingresado
 
-def ingresar_nombre_archivo():
+#funcion para ingresar nombre de archivo y elegir el modo con el que se manipulara
+def ingresar_nombre_archivo(archivos_generados):
+    nombre_archivo = ""
+    opcion = ""
+
+    nombre_archivo = input("Ingrese el nombre del archivo donde desea guardar los datos: ")
+    for nombre in archivos_generados:
+        if nombre == nombre_archivo:
+            print("-Ya existe un archivo con ese nombre-")
+            while not opcion == "modificar" or not opcion == "sobreescribir":
+                opcion = input("Desea 'modificar' o 'sobreescribir' el archivo? (Ingresar una de las dos palabras que estan marcadas con comillas)")
+            
+    return nombre_archivo, opcion
+
+cargar_datos()
