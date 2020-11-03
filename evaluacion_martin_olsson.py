@@ -16,6 +16,20 @@ Tenga en cuenta que las acciones del menú no tienen un orden en particular.
 
 import csv
 
+def programa():
+    imprimir_menu()
+    
+    while True:
+        opcion = input("")
+
+        if opcion == "3":
+            exit()
+        if opcion == "1":
+            cargar_datos()
+        if opcion == "2":
+            calcular_vacaciones()
+        else:
+            print("Por favor elija una opcion valida")
 
 def imprimir_menu():
     print("\n-GESTOR DE VACACIONES-")
@@ -166,3 +180,8 @@ def calcular_vacaciones():
                     empleado = next(csv_empleados,None)
     except IOError:
         print("Error en al abrir el archivo")
+
+
+
+#se ejecuta
+programa()
