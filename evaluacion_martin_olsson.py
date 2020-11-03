@@ -17,9 +17,8 @@ Tenga en cuenta que las acciones del menú no tienen un orden en particular.
 import csv
 
 def programa():
-    imprimir_menu()
-    
     while True:
+        imprimir_menu()
         opcion = input("")
 
         if opcion == "3":
@@ -66,7 +65,8 @@ def cargar_datos():
     try:
         with open(nombre_archivo, modo_archivo, newline="") as archivo:
             cargador_archivo = csv.writer(archivo)
-            cargador_archivo.writerow(campos)
+            if modo_archivo == 'w':
+                cargador_archivo.writerow(campos)
             cargador_archivo.writerows(empleados_ingresados)
             print(f'-El archivo {nombre_archivo} fue guardado con exito.-')
     except IOError:
@@ -115,9 +115,11 @@ def ingresar_nombre_archivo(archivos_generados):
     for nombre in archivos_generados:
         if nombre == nombre_archivo:
             print("-Ya existe un archivo con ese nombre-")
-            while not opcion == "modificar" or not opcion == "sobreescribir":
-                opcion = input("Desea 'modificar' o 'sobreescribir' el archivo? (Ingresar una de las dos palabras que estan marcadas con comillas)")
-            
+            opcion = input("Si desea sobreescribirlo ingrese 'si'(de lo contrario solo sera modificado): ")
+            if opcion=='si':
+                opcion="sobreescribir"
+            else:
+                opcion="modificar"
     return nombre_archivo, opcion
 
 
@@ -176,6 +178,8 @@ def calcular_vacaciones():
                                 vacaciones_usadas+=1
                             dia = next(csv_dias, None)
                         vacaciones_restantes = int(empleado[3]) - vacaciones_usadas
+                        if vacaciones_restantes < 0:
+                            vacaciones_restantes = 0
                         print(f'Legajo {numero_legajo} : {empleado[2]}{empleado[1]}, le restan {vacaciones_restantes} días de vacaciones')
                     empleado = next(csv_empleados,None)
     except IOError:
